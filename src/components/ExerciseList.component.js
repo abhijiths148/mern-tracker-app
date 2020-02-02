@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Exercise = props => (
   <tr>
@@ -28,6 +29,27 @@ export default class ExerciseList extends Component {
     this.state = { exercises: [] };
   }
 
+  componentDidMount() {
+    axios
+      .get("http://localhost:5000/exercises/")
+      .then(response => {
+        this.setState({ exercises: response.data });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  deleteExercise = id => {
+    axios.delete("http://localhost:5000/exercises/" + id).then(response => {
+      console.log(response.data);
+    });
+
+    this.setState({
+      exercises: this.state.exercises.filter(el => el._id !== id)
+    });
+  };
+
   exerciseList() {
     return this.state.exercises.map(currentexercise => {
       return (
@@ -39,6 +61,7 @@ export default class ExerciseList extends Component {
       );
     });
   }
+
   render() {
     return (
       <div>
