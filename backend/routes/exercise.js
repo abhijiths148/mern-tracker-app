@@ -11,7 +11,7 @@ router.route('/add').post((req, res) => {
     const username = req.body.username;
     const description = req.body.description;
     const duration = Number(req.body.duration);
-    const date = Date(req.body.date);
+    const date = Date.parse(req.body.date);
 
     const newExercise = new Exercise({
         username,
@@ -37,7 +37,7 @@ router.route('/update/:id').post((req, res) => {
         exercise.username = req.body.username ? req.body.username : exercise.username;
         exercise.description = req.body.description ? req.body.description : exercise.description;
         exercise.duration = req.body.duration ? Number(req.body.duration) : exercise.duration ;
-        exercise.date = req.body.date ? Date(req.body.date) : exercise.date;
+        exercise.date = req.body.date ? Date.parse(req.body.date) : exercise.date;
         
         exercise.save()
         .then(() => res.json('Exercise Updated!'))
