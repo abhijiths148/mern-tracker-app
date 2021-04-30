@@ -6,13 +6,13 @@ import ExerciseList from "./components/ExerciseList.component.js";
 import EditExercise from "./components/EditExercise.component.js";
 import CreateExercise from "./components/CreateExercise.component.js";
 import CreateUser from "./components/CreateUser.component.js";
+import './styles/Styles.css';
 
 function App() {
   return (
     <Router>
       <div className="container">
         <Navbar />
-        <br />
         <Route path="/" exact component={ExerciseList} />
         <Route path="/edit/:id" component={EditExercise} />
         <Route path="/create" component={CreateExercise} />

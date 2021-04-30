@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import { getExercises, deleteExercise } from "../services/Exersice";
 
-const Exercise = props => (
+const Exercise = (props) => (
   <tr>
     <td>{props.exercise.username}</td>
     <td>{props.exercise.description}</td>
@@ -30,28 +30,28 @@ export default class ExerciseList extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get("http://localhost:5000/exercises/")
-      .then(response => {
-        this.setState({ exercises: response.data });
+    getExercises()
+      .then((data) => {
+        this.setState({ exercises: data });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
 
-  deleteExercise = id => {
-    axios.delete("http://localhost:5000/exercises/" + id).then(response => {
-      console.log(response.data);
-    });
-
-    this.setState({
-      exercises: this.state.exercises.filter(el => el._id !== id)
-    });
+  deleteExercise = (id) => {
+    deleteExercise(id)
+      .then((data) => {
+        console.log(data);
+        this.setState({
+          exercises: this.state.exercises.filter((el) => el._id !== id),
+        });
+      })
+      .catch((error) => console.log(error));
   };
 
   exerciseList() {
-    return this.state.exercises.map(currentexercise => {
+    return this.state.exercises.map((currentexercise) => {
       return (
         <Exercise
           exercise={currentexercise}
@@ -64,10 +64,10 @@ export default class ExerciseList extends Component {
 
   render() {
     return (
-      <div>
+      <div className="main-table">
         <h3>Logged Exercises</h3>
-        <table className="table">
-          <thead className="thead-light">
+        <table className="table table-striped table-bordered">
+          <thead className="thead-dark">
             <tr>
               <th>Username</th>
               <th>Description</th>
