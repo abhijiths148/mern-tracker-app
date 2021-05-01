@@ -65,7 +65,7 @@ export default class ExerciseList extends Component {
   render() {
     return (
       <div className="main-table">
-        <h3>Logged Exercises</h3>
+        <h3 className='header'>Logged Exercises</h3>
         <table className="table table-striped table-bordered">
           <thead className="thead-dark">
             <tr>

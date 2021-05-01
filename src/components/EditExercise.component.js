@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
 import DatePicker from "react-datepicker";
+import { getExerciseById, getUsers, editExercise } from "../services/Exersice";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default class EditExercise extends Component {
@@ -12,89 +12,84 @@ export default class EditExercise extends Component {
       description: "",
       duration: 0,
       date: new Date(),
-      users: []
+      users: [],
     };
   }
 
   componentDidMount() {
-    axios
-      .get("http://localhost:5000/exercises/" + this.props.match.params.id)
-      .then(response => {
+    getExerciseById(this.props.match.params.id)
+      .then((data) => {
         this.setState({
-          username: response.data.username,
-          description: response.data.description,
-          duration: response.data.duration,
-          date: new Date(response.data.date)
+          username: data.username,
+          description: data.description,
+          duration: data.duration,
+          date: new Date(data.date),
         });
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
 
-    axios
-      .get("http://localhost:5000/users/")
-      .then(response => {
-        if (response.data.length > 0) {
+    getUsers()
+      .then((data) => {
+        if (data.length > 0) {
           this.setState({
-            users: response.data.map(user => user.username)
+            users: data.map((user) => user.username),
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
 
-  onChangeUsername = e => {
+  onChangeUsername = (e) => {
     this.setState({
-      username: e.target.value
+      username: e.target.value,
     });
   };
 
-  onChangeDescription = e => {
+  onChangeDescription = (e) => {
     this.setState({
-      description: e.target.value
+      description: e.target.value,
     });
   };
 
-  onChangeDuration = e => {
+  onChangeDuration = (e) => {
     this.setState({
-      duration: e.target.value
+      duration: e.target.value,
     });
   };
 
-  onChangeDate = date => {
+  onChangeDate = (date) => {
     this.setState({
-      date: date
+      date: date,
     });
   };
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     e.preventDefault();
 
     const exercise = {
       username: this.state.username,
       description: this.state.description,
       duration: this.state.duration,
-      date: this.state.date
+      date: this.state.date,
     };
 
-    console.log(exercise);
-
-    axios
-      .post(
-        "http://localhost:5000/exercises/update/" + this.props.match.params.id,
-        exercise
-      )
-      .then(res => console.log(res.data));
+    editExercise(this.props.match.params.id, exercise)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
 
     window.location = "/";
   };
 
   render() {
     return (
-      <div>
-        <h3>Edit Exercise Log</h3>
+      <div className="main-table">
+        <h3 className="header">Edit Exercise Log</h3>
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
             <label>Username: </label>
@@ -105,7 +100,7 @@ export default class EditExercise extends Component {
               value={this.state.username}
               onChange={this.onChangeUsername}
             >
-              {this.state.users.map(function(user) {
+              {this.state.users.map(function (user) {
                 return (
                   <option key={user} value={user}>
                     {user}
