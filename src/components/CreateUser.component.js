@@ -1,41 +1,37 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { addUser } from "../services/Exersice";
 export default class CreateUser extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      username: ""
+      username: "",
     };
   }
-  onChangeUsername = e => {
+  onChangeUsername = (e) => {
     this.setState({
-      username: e.target.value
+      username: e.target.value,
     });
-  }
+  };
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     e.preventDefault();
 
     const user = {
-      username: this.state.username
+      username: this.state.username,
     };
 
-    console.log(user);
-
-    axios
-      .post("http://localhost:5000/users/add", user)
-      .then(res => console.log(res.data));
+    addUser(user).then((data) => console.log(data));
 
     this.setState({
-      username: ""
+      username: "",
     });
-  }
+  };
 
   render() {
     return (
-      <div className='main-table'>
-        <h3 className='header'>Create New User</h3>
+      <div className="main-table">
+        <h3 className="header">Create New User</h3>
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
             <label>Username: </label>
